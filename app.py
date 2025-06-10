@@ -5,6 +5,7 @@ from tensorflow.keras.models import load_model
 from PIL import Image
 import numpy as np
 from io import BytesIO
+import os
 
 app = Flask(__name__)
 api = Api(app, doc='/docs')
@@ -46,4 +47,5 @@ class Predict(Resource):
             return {'error': str(e)}, 500
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port, debug=True)
