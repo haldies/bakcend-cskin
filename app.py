@@ -1,21 +1,23 @@
 from flask import Flask
 from flask_restx import Api, Resource
 from werkzeug.datastructures import FileStorage
+from flask_cors import CORS
+
 from tensorflow.keras.models import load_model
 from PIL import Image
 import numpy as np
 from io import BytesIO
-import os
 
 app = Flask(__name__)
+CORS(app)  # Mengizinkan permintaan dari domain berbeda
+
 api = Api(app, doc='/docs')
 
 model = load_model('app/model/model.h5')
 classes = ['Normal', 'Oily', 'Dry']
 
 upload_parser = api.parser()
-upload_parser.add_argument('image', location='files',
-                           type=FileStorage, required=True, help='Gambar wajah')
+upload_parser.add_argument('image', location='files', type=FileStorage, required=True, help='Gambar wajah')
 
 @api.route('/api/predict')
 class Predict(Resource):
@@ -50,4 +52,3 @@ if __name__ == '__main__':
     import os
     port = int(os.environ.get('PORT', 8080)) 
     app.run(host='0.0.0.0', port=port, debug=False)
-
