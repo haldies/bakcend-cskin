@@ -3,3 +3,4 @@ flask-restx
 tensorflow
 pillow
 numpy
+gunicorn
